@@ -15,7 +15,7 @@ from typing import (
 )
 
 def _random_id() -> str:
-    ascii = string.ascii_letters
+    ascii = string.ascii_lowercase
     return "".join(random.choices(ascii, k=GameGateway.NUM_ROOM_LETTERS))
 
 class JoinReturnCodes(Enum):

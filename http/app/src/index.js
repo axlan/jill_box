@@ -1,22 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import ReactDOM from 'react-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/core/styles';
 import './index.css';
-import App from './App';
-import theme from './theme';
-import * as serviceWorker from './serviceWorker';
+import Login from "./containers/Login";
+import Waiting from "./containers/Waiting";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+
+
+const client = new W3CWebSocket('ws://192.168.1.110:5000');
+
+
+
+
+export default function ViewMutex(props) {
+  const [curPage, setCurPage] = useState({"page": "join"});
+  useEffect(() => {
+    client.onopen = () => {
+      console.log('WebSocket Client Connected');
+    };
+    client.onmessage = (message) => {
+      console.log(message);
+    };
+  }, []);
+  console.log(curPage);
+  switch(curPage['page']) {
+    case "waiting":
+      return <Waiting setCurPage={setCurPage} client={client} user={curPage['user']} room={curPage['room']}  />
+    case "join":
+    default:
+      return <Login setCurPage={setCurPage} client={client}/>
+  }
+
+
+}
+
+// ========================================
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
-  {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-  <CssBaseline />
-  <App />
-  </ThemeProvider>,
+  <ViewMutex />,
   document.getElementById('root')
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();

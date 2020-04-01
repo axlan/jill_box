@@ -125,51 +125,55 @@ class TestRoom(Room):
             return (InteractReturnCodes.SUCCESS, ret)
         return (InteractReturnCodes.WRONG_STATE, '')
 
-gateway = GameGateway()
+def main():
+    gateway = GameGateway()
 
-room = gateway.new_game(TestRoom)
+    room = gateway.new_game(TestRoom)
 
-name1 = "tester1"
-name2 = "tester2"
-name3 = "tester3"
+    name1 = "tester1"
+    name2 = "tester2"
+    name3 = "tester3"
 
-print(gateway.join_room(room, name1))
-print(gateway.join_room(room, name2))
-print(gateway.join_room(room, name3))
+    print(gateway.join_room(room, name1))
+    print(gateway.join_room(room, name2))
+    print(gateway.join_room(room, name3))
 
-print(gateway.room_start(room))
+    print(gateway.room_start(room))
 
-print(gateway.get_room_state(room))
+    print(gateway.get_room_state(room))
 
-print(gateway.submit_data(room, name1, {'answer': 'A'}))
-print(gateway.submit_data(room, name2, {'answer': 'B'}))
-print(gateway.submit_data(room, name3, {'answer': 'C'}))
+    print(gateway.submit_data(room, name1, {'answer': 'A'}))
+    print(gateway.submit_data(room, name2, {'answer': 'B'}))
+    print(gateway.submit_data(room, name3, {'answer': 'C'}))
 
-print(gateway.get_room_state(room))
-print(gateway.get_room_state(room, name2))
+    print(gateway.get_room_state(room))
+    print(gateway.get_room_state(room, name2))
 
-print(gateway.submit_data(room, name1, {'vote': '1'}))
-print(gateway.submit_data(room, name2, {'vote': '0'}))
-print(gateway.submit_data(room, name3, {'vote': '1'}))
+    print(gateway.submit_data(room, name1, {'vote': '1'}))
+    print(gateway.submit_data(room, name2, {'vote': '0'}))
+    print(gateway.submit_data(room, name3, {'vote': '1'}))
 
-print(gateway.get_room_state(room))
+    print(gateway.get_room_state(room))
 
-print(gateway.submit_data(room, name1, {}))
-print(gateway.submit_data(room, name2, {}))
-print(gateway.submit_data(room, name3, {}))
+    print(gateway.submit_data(room, name1, {}))
+    print(gateway.submit_data(room, name2, {}))
+    print(gateway.submit_data(room, name3, {}))
 
 
-print(gateway.get_room_state(room))
+    print(gateway.get_room_state(room))
 
-print(gateway.submit_data(room, name1, {'answer': 'A2'}))
-print(gateway.submit_data(room, name2, {'answer': 'B2'}))
-print(gateway.submit_data(room, name3, {'answer': 'C2'}))
+    print(gateway.submit_data(room, name1, {'answer': 'A2'}))
+    print(gateway.submit_data(room, name2, {'answer': 'B2'}))
+    print(gateway.submit_data(room, name3, {'answer': 'C2'}))
 
-print(gateway.get_room_state(room))
-print(gateway.get_room_state(room, name2))
+    print(gateway.get_room_state(room))
+    print(gateway.get_room_state(room, name2))
 
-print(gateway.submit_data(room, name1, {'vote': '0'}))
-print(gateway.submit_data(room, name2, {'vote': '0'}))
-print(gateway.submit_data(room, name3, {'vote': '1'}))
+    print(gateway.submit_data(room, name1, {'vote': '0'}))
+    print(gateway.submit_data(room, name2, {'vote': '0'}))
+    print(gateway.submit_data(room, name3, {'vote': '1'}))
 
-print(gateway.get_room_state(room))
+    print(gateway.get_room_state(room))
+
+if __name__ == "__main__":
+    main()
