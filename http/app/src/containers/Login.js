@@ -59,7 +59,6 @@ export default function Login(props) {
           <FormControl
             value={user}
             onChange={e => setUser(e.target.value)}
-            type="user"
           />
         </FormGroup>
         <Button block size="large" disabled={!validateJoin()} onClick={handleJoin}>
@@ -73,7 +72,6 @@ export default function Login(props) {
           <FormControl
             value={user}
             onChange={e => setUser(e.target.value)}
-            type="user"
           />
         </FormGroup>
         <Button block size="large" disabled={!validateCreate()} onClick={handleCreate}>

@@ -1,5 +1,6 @@
 
 import string
+import json
 import random
 from enum import Enum, auto
 from collections import defaultdict
@@ -24,12 +25,14 @@ def _load_prompts() -> List[Tuple[str, str]]:
 class TestRoom(Room):
 
     class State(Enum):
-        WAITING_TO_START = auto()
-        COLLECTING_ANSWERS = auto()
-        VOTING = auto()
-        SHOWING_RESULTS = auto()
+        WAITING_TO_START = 'WAITING_TO_START'
+        COLLECTING_ANSWERS = 'COLLECTING_ANSWERS'
+        VOTING = 'VOTING'
+        SHOWING_RESULTS = 'SHOWING_RESULTS'
 
     ROUNDS = 3 
+
+    CORRECT_KEY = "~!~ø~!~"
 
     PROMPTS = _load_prompts()
   
@@ -38,7 +41,7 @@ class TestRoom(Room):
         
         self.prompts = random.sample(TestRoom.PROMPTS, TestRoom.ROUNDS)
         self.state = TestRoom.State.WAITING_TO_START
-        self.round = 1
+        self.round = 0
         self.answers: Dict[str, str] = {}
         self.votes: Dict[str, str] = {}
         self.vote_orders: Dict[str, List[str]] = {}
@@ -65,6 +68,7 @@ class TestRoom(Room):
     
     def __start_voting(self):
         self.state = TestRoom.State.VOTING
+        self.answers[TestRoom.CORRECT_KEY] = self.prompts[self.round][1]
         for player in self.players:
             other_players = [ k for k in self.answers.keys() if k != player ]
             self.vote_orders[player] = random.sample(other_players, len(other_players))
@@ -77,8 +81,11 @@ class TestRoom(Room):
 
     def __votes_to_score(self):
         scores = { u:0 for u in self.players }
-        for vote in self.votes.values():
-            scores[vote] += 1 
+        for player, vote in self.votes.items():
+            if vote in scores:
+                scores[vote] += 1
+            else:
+                scores[player] += 1
         return scores
 
     def __next_round(self):
@@ -96,7 +103,7 @@ class TestRoom(Room):
     def submit_data(self, player, data) -> InteractReturnCodes:
         try:
             if self.state == TestRoom.State.COLLECTING_ANSWERS:
-                self.answers[player] = data['answer']
+                self.answers[player] = data['answer'].upper()
                 if len(self.answers) == len(self.players):
                     self.__start_voting()
             elif self.state == TestRoom.State.VOTING:
@@ -114,16 +121,16 @@ class TestRoom(Room):
         except:
             return InteractReturnCodes.INVALID_DATA
 
-    def get_room_state(self, player) -> Tuple[InteractReturnCodes, str]:
+    def get_room_state(self, player) -> Tuple[InteractReturnCodes, str, str]:
         if self.state == TestRoom.State.COLLECTING_ANSWERS:
-            return (InteractReturnCodes.SUCCESS, self.get_prompt())
+            return (InteractReturnCodes.SUCCESS, self.state, self.get_prompt())
         elif self.state == TestRoom.State.VOTING:
-            answers = str(self.get_anwers(player))
-            return (InteractReturnCodes.SUCCESS, answers)
+            answers = json.dumps(self.get_anwers(player))
+            return (InteractReturnCodes.SUCCESS, self.state, answers)
         elif self.state == TestRoom.State.SHOWING_RESULTS:
-            ret = str({'earned': self.__votes_to_score(), 'total': self.scores})
-            return (InteractReturnCodes.SUCCESS, ret)
-        return (InteractReturnCodes.WRONG_STATE, '')
+            ret = json.dumps({'answer': self.prompts[self.round][1],'earned': self.__votes_to_score(), 'total': self.scores})
+            return (InteractReturnCodes.SUCCESS, self.state, ret)
+        return (InteractReturnCodes.WRONG_STATE, self.state, '')
 
 def main():
     gateway = GameGateway()

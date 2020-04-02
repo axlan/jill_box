@@ -58,7 +58,7 @@ class Room(ABC):
     def start(self) -> StartReturnCodes:
         pass
     @abstractmethod
-    def get_room_state(self, player) -> Tuple[InteractReturnCodes, str]:
+    def get_room_state(self, player) -> Tuple[InteractReturnCodes, str, str]:
         pass
     @abstractmethod
     def submit_data(self, player, data) -> InteractReturnCodes:
@@ -91,13 +91,13 @@ class GameGateway:
         except:
             return JoinReturnCodes.ROOM_NOT_FOUND
 
-    def get_room_state(self, room, name=None) -> Tuple[InteractReturnCodes, str]:
+    def get_room_state(self, room, name=None) -> Tuple[InteractReturnCodes, str, str]:
         if room in self.rooms:
             if name is None or name in self.rooms[room].players:
                 return self.rooms[room].get_room_state(name)
             else:
-                return (InteractReturnCodes.PLAYER_NOT_FOUND, '')
-        return (InteractReturnCodes.ROOM_NOT_FOUND, '')
+                return (InteractReturnCodes.PLAYER_NOT_FOUND, '', '')
+        return (InteractReturnCodes.ROOM_NOT_FOUND, '', '')
 
     def submit_data(self, room, name, data) -> InteractReturnCodes:
         if room in self.rooms:

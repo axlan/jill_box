@@ -16,7 +16,7 @@ export default function Waiting(props) {
       } else if (data['type'] === 'error') {
         setError(data['msg'])
       } else {
-        
+        props.setCurPage({'page': "prompt", 'user': props.user, 'room': props.room, 'prompt': data['prompt'] })
       }
     };
   });
@@ -27,7 +27,8 @@ export default function Waiting(props) {
 
   function handleStart(event) {
     props.client.send(JSON.stringify({
-      type: "start_room"
+      type: "start_room",
+      room: props.room
     }));
   }
 

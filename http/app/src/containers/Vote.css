@@ -1,9 +1,9 @@
 @media all and (min-width: 480px) {
-    .Waiting {
+    .Vote {
       padding: 60px 0;
     }
   
-    .Waiting form {
+    .Vote form {
       margin: 0 auto;
       max-width: 320px;
     }
