@@ -18,7 +18,9 @@ export default function Vote(props) {
       }
     };
   });
-  const answersBoxes = props.answers.map((answer, i) => (
+
+
+  const answersBoxes = props.answers['answers'].map((answer, i) => (
     <Fragment key={'answer' + i}>
       <input 
         type="radio"
@@ -43,6 +45,7 @@ export default function Vote(props) {
   return (
     <div className="Vote">
       <h1>Choose the best answer</h1>
+      <h2>{props.answers['prompt']}</h2>
       {answersBoxes}
       <hr />
       <h1>{error}</h1>

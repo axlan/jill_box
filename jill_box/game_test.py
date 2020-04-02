@@ -125,7 +125,7 @@ class TestRoom(Room):
         if self.state == TestRoom.State.COLLECTING_ANSWERS:
             return (InteractReturnCodes.SUCCESS, self.state, self.get_prompt())
         elif self.state == TestRoom.State.VOTING:
-            answers = json.dumps(self.get_anwers(player))
+            answers = json.dumps({'prompt': self.prompts[self.round][0], 'answers': self.get_anwers(player)})
             return (InteractReturnCodes.SUCCESS, self.state, answers)
         elif self.state == TestRoom.State.SHOWING_RESULTS:
             ret = json.dumps({'answer': self.prompts[self.round][1],'earned': self.__votes_to_score(), 'total': self.scores})

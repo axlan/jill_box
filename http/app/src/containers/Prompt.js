@@ -42,6 +42,7 @@ export default function Prompt(props) {
           <FormLabel >Answer</FormLabel >
           <FormControl
             value={answer}
+            autoComplete="off"
             disabled={waiting}
             onChange={e => setAnswer(e.target.value)}
             type="user"

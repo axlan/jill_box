@@ -50,6 +50,7 @@ export default function Login(props) {
           <FormLabel >Room code</FormLabel >
           <FormControl
             autoFocus
+            autoComplete="off"
             value={room}
             onChange={e => setRoom(e.target.value)}
           />
