@@ -32,3 +32,4 @@ TODO:
  * Add logic to quit / start new game
  * Add communication of current round
  * Add some synchronization protections? Need to better understand how shared objects work in asyncio
+ * Making scoring scale over rounds, prevent ties

@@ -25,6 +25,7 @@ export default function Prompt(props) {
   }
 
   function handleSubmit(event) {
+    event.preventDefault();
     setWaiting(true)
     props.client.send(JSON.stringify({
       type: "submit_prompt",
@@ -38,19 +39,21 @@ export default function Prompt(props) {
     <div className="Prompt">
       <h1>Fill in the blank</h1>
       <h1>{props.prompt}</h1>
-      <FormGroup controlId="answer" size="large">
-          <FormLabel >Answer</FormLabel >
-          <FormControl
-            value={answer}
-            autoComplete="off"
-            disabled={waiting}
-            onChange={e => setAnswer(e.target.value)}
-            type="user"
-          />
-      </FormGroup>
-      <Button block size="large" disabled={!validateAnswer()} onClick={handleSubmit}>
-        Submit answer
-      </Button>
+      <form onSubmit={handleSubmit}>
+        <FormGroup controlId="answer" size="large">
+            <FormLabel >Answer</FormLabel >
+            <FormControl
+              value={answer}
+              autoComplete="off"
+              disabled={waiting}
+              onChange={e => setAnswer(e.target.value)}
+              type="user"
+            />
+        </FormGroup>
+        <Button block size="large" disabled={!validateAnswer()} type="submit">
+          Submit answer
+        </Button>
+      </form>
       <hr />
       <h1>{error}</h1>
     </div>

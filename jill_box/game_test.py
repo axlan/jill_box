@@ -29,6 +29,7 @@ class TestRoom(Room):
         COLLECTING_ANSWERS = 'COLLECTING_ANSWERS'
         VOTING = 'VOTING'
         SHOWING_RESULTS = 'SHOWING_RESULTS'
+        DONE = 'DONE'
 
     ROUNDS = 3 
 
@@ -97,7 +98,7 @@ class TestRoom(Room):
             self.vote_orders: Dict[str, List[str]] = {}
             self.confirmed: Dict[str, bool] = {}
         else:
-            pass
+            self.state = TestRoom.State.DONE
 
 
     def submit_data(self, player, data) -> InteractReturnCodes:
@@ -122,7 +123,9 @@ class TestRoom(Room):
             return InteractReturnCodes.INVALID_DATA
 
     def get_room_state(self, player) -> Tuple[InteractReturnCodes, str, str]:
-        if self.state == TestRoom.State.COLLECTING_ANSWERS:
+        if self.round == TestRoom.ROUNDS:
+            return (InteractReturnCodes.SUCCESS, self.state, '')
+        elif self.state == TestRoom.State.COLLECTING_ANSWERS:
             return (InteractReturnCodes.SUCCESS, self.state, self.get_prompt())
         elif self.state == TestRoom.State.VOTING:
             answers = json.dumps({'prompt': self.prompts[self.round][0], 'answers': self.get_anwers(player)})

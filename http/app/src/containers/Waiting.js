@@ -44,7 +44,7 @@ export default function Waiting(props) {
           {players}
       </ul>
       <Button block size="large" disabled={!validateStart()} onClick={handleStart}>
-        Start Room
+        Start Game
       </Button>
       <hr />
       <h1>{error}</h1>
