@@ -18,12 +18,12 @@ export default function Results(props) {
 
 
   const earned = Object.keys(props.results['earned']).map((key) =>
-        <li key={"earned-"+key}>{key + '-' + props.results['earned'][key]}</li>
+        <li key={"earned-"+key}>{key + ': ' + props.results['earned'][key] + ' points'}</li>
     );
 
   var total_scores = props.results['total']
   const total = Object.keys(total_scores).map((key) =>
-    <li key={"total-"+key}>{key + '-' + total_scores[key]}</li>
+    <li key={"total-"+key}>{key + ': ' + total_scores[key] + ' points'}</li>
   );
   const winner = Object.keys(total_scores).reduce(function(a, b){ return total_scores[a] > total_scores[b] ? a : b });
 

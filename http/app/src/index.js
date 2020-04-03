@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import ReactDOM from 'react-dom';
-import './index.css';
 import Login from "./containers/Login";
 import Waiting from "./containers/Waiting";
 import Prompt from "./containers/Prompt";
 import Vote from "./containers/Vote";
 import Results from "./containers/Results";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
-
+import "assets/css/material-dashboard-react.css";
 
 const client = new W3CWebSocket('ws://192.168.1.110:5000');
-
-
 
 
 export default function ViewMutex(props) {

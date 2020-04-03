@@ -1,6 +1,13 @@
 import React, { useState,useEffect } from "react";
-import { Button, FormGroup, FormControl, FormLabel  } from "react-bootstrap";
-import "./Login.css";
+import { Container, Row, Col  } from "react-bootstrap";
+import CustomInput from "components/CustomInput/CustomInput.js";
+import Button from "components/CustomButtons/Button.js";
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import Box from '@material-ui/core/Box';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function Login(props) {
   const [room, setRoom] = useState("");
@@ -19,6 +26,10 @@ export default function Login(props) {
     };
   });
 
+  function validateRoom() {
+    return room.length === 4 && RegExp('^[a-zA-Z]+$').test(room);
+  }
+
   function validateJoin() {
     return room.length === 4 && RegExp('^[a-zA-Z]+$').test(room) && user.length > 0;
   }
@@ -29,6 +40,7 @@ export default function Login(props) {
 
 
   function handleJoin(event) {
+    event.preventDefault();
     props.client.send(JSON.stringify({
       type: "join_room",
       user: user,
@@ -36,7 +48,16 @@ export default function Login(props) {
     }));
   }
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setError("");
+  };
+
   function handleCreate(event) {
+    event.preventDefault();
     props.client.send(JSON.stringify({
       type: "create_room",
       user: user
@@ -44,43 +65,70 @@ export default function Login(props) {
   }
 
   return (
-    <div className="Login">
-      <form>
-        <FormGroup controlId="room" size="large">
-          <FormLabel >Room code</FormLabel >
-          <FormControl
-            autoFocus
-            autoComplete="off"
-            value={room}
-            onChange={e => setRoom(e.target.value)}
-          />
-        </FormGroup>
-        <FormGroup controlId="user" size="large">
-          <FormLabel >Name</FormLabel >
-          <FormControl
-            value={user}
-            onChange={e => setUser(e.target.value)}
-          />
-        </FormGroup>
-        <Button block size="large" disabled={!validateJoin()} onClick={handleJoin}>
-          Join Room
-        </Button>
-      </form>
-      <hr />
-      <form onSubmit={handleCreate}>
-        <FormGroup controlId="user" size="large">
-          <FormLabel >Name</FormLabel >
-          <FormControl
-            value={user}
-            onChange={e => setUser(e.target.value)}
-          />
-        </FormGroup>
-        <Button block size="large" disabled={!validateCreate()} onClick={handleCreate}>
-          Create Room
-        </Button>
-      </form>
-      <hr />
-      <h1>{error}</h1>
-    </div>
+    <div>
+    <Container>
+      <Row>
+        <Col>
+          <Box border={1}>
+            <form onSubmit={handleJoin}>
+              <CustomInput
+                autoFocus
+                id="room_input"
+                success = {validateRoom()}
+                error= {room.length >= 4 && !validateRoom()}
+                inputProps={{
+                  placeholder: "Enter Room Code",
+                  autoComplete: "off",
+                  onChange: (e) => setRoom(e.target.value)
+                }}
+                formControlProps={{
+                  fullWidth: false
+                }}s
+              />
+              <CustomInput
+                id="user_input"
+                success = {validateCreate()}
+                inputProps={{
+                  placeholder: "Enter Your Name",
+                  onChange: (e) => setUser(e.target.value)
+                }}
+                formControlProps={{
+                  fullWidth: false
+                }}
+              />
+              <Button color="success" disabled={!validateJoin()} type="submit">
+                Join Room
+              </Button>
+            </form>
+          </Box>
+        </Col>
+        <Col>
+          <Box border={1}>
+            <form onSubmit={handleCreate}>
+            <CustomInput
+                  id="user_input2"
+                  success = {validateCreate()}
+                  inputProps={{
+                    placeholder: "Enter Your Name",
+                    onChange: (e) => setUser(e.target.value)
+                  }}
+                  formControlProps={{
+                    fullWidth: false
+                  }}
+                />
+              <Button color="success" disabled={!validateCreate()} type="submit">
+                Create Room
+              </Button>
+            </form>
+          </Box>
+        </Col>
+      </Row>
+    </Container>
+    <Snackbar open={error.length > 0} autoHideDuration={6000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity="error">
+        This is a success message!
+      </Alert>
+    </Snackbar>
+  </div>
   );
 }

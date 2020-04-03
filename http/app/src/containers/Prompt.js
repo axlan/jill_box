@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { Button, FormGroup, FormControl, FormLabel } from "react-bootstrap";
-import "./Prompt.css";
+import Quote from "components/Typography/Quote.js";
 
 export default function Prompt(props) {
   const [answer, setAnswer] = useState("");
@@ -38,7 +38,7 @@ export default function Prompt(props) {
   return (
     <div className="Prompt">
       <h1>Fill in the blank</h1>
-      <h1>{props.prompt}</h1>
+      <Quote text={props.prompt} />
       <form onSubmit={handleSubmit}>
         <FormGroup controlId="answer" size="large">
             <FormLabel >Answer</FormLabel >

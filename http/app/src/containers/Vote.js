@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import "./Vote.css";
+import Button from "components/CustomButtons/Button.js";
 
 export default function Vote(props) {
   const [selected, setSelected] = useState(-1);
@@ -18,16 +19,16 @@ export default function Vote(props) {
       }
     };
   });
+  
+
 
 
   const answersBoxes = props.answers['answers'].map((answer, i) => (
     <Fragment key={'answer' + i}>
-      <input 
-        type="radio"
-        name={'' + i}
+      <Button block
+        color={selected < 0 ? "warning" : (selected === i ? "success" : "error") }
         disabled={waiting}
-        checked={selected === i}
-        onChange={e => {
+        onClick={e => {
           setSelected(i);
           setWaiting(true);
           props.client.send(JSON.stringify({
@@ -37,8 +38,9 @@ export default function Vote(props) {
             vote: i
           }));
         }}
-      />
-      {answer}
+      >
+        {answer}
+      </Button>
     </Fragment>
   ));
 
